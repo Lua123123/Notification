@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Messenger</string>
+
+    <string name="vp_locations">Locations</string>
+    <string name="vp_client_area">Client Area</string>
+    <string name="vp_menu">Menu</string>
+</resources>
