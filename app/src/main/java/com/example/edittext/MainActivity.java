@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
         txtNotification = (TextView) findViewById(R.id.txtNotification);
 
+        //tat app lay lai du lieu truyen vao truoc do
+        txtNotification.setText(getIntent().getStringExtra("openMessage"));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("Message", "Message", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
             txtNotification.setText(message);
 
+
         }
     };
 
@@ -97,7 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "Message");
+        //tat app lay lai du lieu truyen vao truoc do
+        Intent openIntent = new Intent(this, MainActivity.class);
+        openIntent.putExtra("openMessage", message);
+        PendingIntent openPending = PendingIntent.getActivity(this, 0, openIntent,
+                0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this,
+                "Message");
         builder.setContentTitle(title);
         builder.setContentText(message);
         builder.setPriority(NotificationCompat.PRIORITY_HIGH);
@@ -110,10 +121,14 @@ public class MainActivity extends AppCompatActivity {
         builder.setOnlyAlertOnce(true);
         builder.addAction(R.mipmap.ic_launcher, "Toast", actionIntent);
 
+        //tat app lay lai du lieu truyen vao truoc do
+        builder.addAction(R.mipmap.ic_launcher, "Open",openPending);
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
         if (notificationManager != null) {
             notificationManager.notify(getNotificationId(), builder.build());
         }
+
     }
 
 
@@ -123,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
+
 
 
     //Ham tao nhieu Notification voi nhieu click lien tiep
